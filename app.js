@@ -9,7 +9,7 @@ const  http = require('http');
 
 // router declaration 
 var indexRouter = require('./routes/index');
-
+var osRouter= require('./routes/os');
 
 var app = express();
 
@@ -21,8 +21,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/hello', indexRouter);
-
+app.use('/', indexRouter);
+app.use('/os', osRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
