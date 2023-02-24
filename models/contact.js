@@ -1,10 +1,8 @@
 const mongoose = require("mongoose"); 
-var Schema = mongoose.Schema;
-var Contact= new
-Schema(
+var Contactschema = mongoose.Schema(
 {
 FullName : String,
 Phone : Number
 }
 );
- module.exports = mongoose.model("contacts",Contact);
+ module.exports = mongoose.model("Contact",Contactschema);

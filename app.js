@@ -3,22 +3,25 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 // declaration du serveur
 require('dotenv').config();
 const  http = require('http');
+const db = require('./database/mongodb.json')
+console.log(db.mongo.uri)
+console.log(process.env.URI)
+mongoose.set('strictQuery', false)
+require('./models/contact')
 
 
-//import database 
-var mongoose = require('mongoose');
- var configDB=require('./database/mongodb.json');
 //mongo config 
 const connect =mongoose.connect(
-  configDB.mongo.uri ,
+  db.mongo.uri || process.env.URI ,
   { useNewUrlParser:
   true ,
   useUnifiedTopology: true
-  },
-  ()=> console.log("Connected to DB !!") );
+  }).then(()=> console.log("connected to db")).
+  catch((err)=>{console.log(err.message)})
 
 // router declaration 
 var indexRouter = require('./routes/index');
@@ -39,6 +42,8 @@ app.use('/', indexRouter);
 app.use('/os', osRouter);
 app.use('/products', productsRouter);
 app.use('/contacts', contactRouter);
+
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
@@ -56,4 +61,4 @@ app.use(function(err, req, res, next) {
 });
 console.log(process.env.PORT)
 const server = http.createServer(app);
-server.listen(5000, ()=> { console.log("app is running in port 5000")  });
+server.listen(process.env.PORT || 5000, ()=> { console.log("app is running in port 5000")  });
