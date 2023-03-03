@@ -8,6 +8,7 @@ var mongoose = require('mongoose');
 require('dotenv').config();
 const  http = require('http');
 const db = require('./database/mongodb.json')
+
 console.log(db.mongo.uri)
 console.log(process.env.URI)
 mongoose.set('strictQuery', false)
@@ -36,7 +37,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 app.use('/', indexRouter);
 app.use('/os', osRouter);
@@ -61,4 +62,15 @@ app.use(function(err, req, res, next) {
 });
 console.log(process.env.PORT)
 const server = http.createServer(app);
+
+//definir  socket
+const io = require('socket.io')(server);
+io.on("connexion", (socket)=>{
+  console.log("socket is connected")
+  socket.on("studentIn", (student)=>{
+console.log("student in notification  ")
+socket.emit("studentInClass", student);
+  })
+})
+
 server.listen(process.env.PORT || 5000, ()=> { console.log("app is running in port 5000")  });

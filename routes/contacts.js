@@ -2,13 +2,15 @@ var express = require('express');
 const contact = require('../models/contact');
 var router = express.Router();
 const {getAllContacts}= require('../controllers/contactsController')
+const {addContact}= require('../controllers/contactsController')
+const {updateContact}= require('../controllers/contactsController')
 
 
 
 
 router.get('/',getAllContacts);
-
-          
+router.post('/',addContact)
+router.put('/',updateContact)       
 
 router.delete('/:id', function(req, res, next) {
     const {id} = req.params.id;
